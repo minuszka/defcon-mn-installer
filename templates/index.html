@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeFCoN Masternode Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #1e1b4b;
+            --bg-3: #312e81;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #6b7280;
+            --primary-1: #4f46e5;
+            --primary-2: #7c3aed;
+            --accent: #22c55e;
+            --border: rgba(15, 23, 42, 0.08);
+            --shadow: 0 12px 30px rgba(15, 23, 42, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "IBM Plex Sans", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background:
+                radial-gradient(1200px 800px at 10% -10%, rgba(124, 58, 237, 0.35), transparent 60%),
+                radial-gradient(900px 600px at 90% 0%, rgba(79, 70, 229, 0.35), transparent 55%),
+                linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-bottom: 40px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f8fafc;
+            letter-spacing: 0.08em;
+            text-shadow:
+                0 0 12px rgba(79, 70, 229, 0.65),
+                0 0 24px rgba(124, 58, 237, 0.35),
+                0 4px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .progress-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            animation: fadeIn 1s ease;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #eef2ff;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-1) 0%, var(--primary-2) 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            padding: 10px 12px;
+            min-width: 100px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.95em;
+        }
+
+        .step.active {
+            color: var(--primary-1);
+            font-weight: bold;
+            border-color: rgba(79, 70, 229, 0.4);
+            background: #eef2ff;
+        }
+
+        .step.completed {
+            color: var(--accent);
+            background: #ecfdf5;
+            border-color: rgba(34, 197, 94, 0.35);
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1em;
+        }
+
+        .form-group label .emoji {
+            margin-right: 8px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-1);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+            background: #ffffff;
+        }
+
+        .form-group input.valid {
+            border-color: var(--accent);
+        }
+
+        .form-group input.invalid {
+            border-color: #f44336;
+        }
+
+        .form-group .hint {
+            font-size: 0.9em;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .command-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            position: relative;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+        }
+
+        .command-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-1);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+        }
+
+        .copy-btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 5px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-1) 0%, var(--primary-2) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-secondary {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-success {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .step-content {
+            display: none;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            animation: slideIn 0.5s ease;
+            border-left: 5px solid transparent;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-left-color: #16a34a;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-left-color: #ef4444;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            border-left-color: #0ea5e9;
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .summary-table th, .summary-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .step {
+                font-size: 0.9em;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>DeFCoN MASTERNODE</h1>
+            <p>Registration Helper - Web Interface</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill">0%</div>
+            </div>
+            <div class="step-indicator">
+                <div class="step active" data-step="0">🖥️ VPS Info</div>
+                <div class="step" data-step="1">🔑 BLS</div>
+                <div class="step" data-step="2">🛠️ VPS Install</div>
+                <div class="step" data-step="3">💼 Addresses</div>
+                <div class="step" data-step="4">💰 UTXO</div>
+                <div class="step" data-step="5">⚙️ ProTx</div>
+                <div class="step" data-step="6">✍️ Sign</div>
+                <div class="step" data-step="7">📤 Submit</div>
+                <div class="step" data-step="8">✅ Done</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <!-- Step 0: VPS Info -->
+            <div class="step-content active" id="step0">
+                <h2>🖥️ VPS Information</h2>
+                <div class="form-group">
+                    <label><span class="emoji">🌐</span>VPS IPv4 Address:</label>
+                    <input type="text" id="vps_ip" placeholder="e.g. 45.76.23.83">
+                    <div class="hint">Enter your VPS server IPv4 address</div>
+                </div>
+                <div id="vpsPreview" class="command-box" style="display:none;">
+                    <strong>Service:</strong> <span id="servicePreview"></span>
+                </div>
+            </div>
+
+            <!-- Step 1: BLS Keys -->
+            <div class="step-content" id="step1">
+                <h2>🔑 BLS Keys</h2>
+                <div class="alert alert-info">
+                    <strong>📌 Instructions:</strong><br>
+                    Run in wallet: <code>bls generate true</code><br>
+                    <br>
+                    <div style="background:#fff3cd; padding:10px; border-radius:5px; margin-top:10px;">
+                        <strong>⚠️ WARNING:</strong> <strong style="color:#d9534f;">Store the secret securely</strong>!<br>
+                        This will be the <strong>masternodeblsprivkey</strong> on the VPS!
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label><span class="emoji">🔐</span>BLS Secret (Private Key):</label>
+                    <input type="password" id="bls_secret" name="bls-secret-field" placeholder="Secret generated by bls generate" autocomplete="new-password" data-lpignore="true">
+                    <div class="hint">Required for VPS configuration - store securely!</div>
+                </div>
+                <div class="form-group">
+                    <label><span class="emoji">🔓</span>BLS Public Legacy:</label>
+                    <input type="text" id="bls_public_legacy" placeholder="Hexadecimal BLS public key">
+                    <div class="hint">Result from bls fromsecret (legacy format) - needed for registration!</div>
+                </div>
+            </div>
+
+            <!-- Step 2: VPS Installation - IDE KERÜL! -->
+            <div class="step-content" id="step2">
+                <h2>🖥️ VPS Installation</h2>
+                <div class="alert alert-info">
+                    <strong>📌 Instructions:</strong> Copy and run the following commands in order on your VPS via SSH.
+                </div>
+                
+                <h3 style="margin-top:30px;">1️⃣ Basic Setup</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep1')">📋 Copy</button>
+                    <pre id="vpsStep1">sudo adduser --disabled-password --gecos "" defcon
+sudo usermod -aG sudo defcon
+
+sudo apt update
+sudo apt -y install ufw curl tar jq
+
+sudo ufw allow 22/tcp
+sudo ufw allow 8192/tcp
+sudo ufw --force enable
+sudo ufw status</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">2️⃣ DeFCoN Download</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep3a')">📋 Copy</button>
+                    <pre id="vpsStep3a">sudo apt update</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep3b')">📋 Copy</button>
+                    <pre id="vpsStep3b">sudo apt -y install python3-venv ca-certificates</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep3c')">📋 Copy</button>
+                    <pre id="vpsStep3c">sudo python3 -m venv /opt/gdown</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep3d')">📋 Copy</button>
+                    <pre id="vpsStep3d">sudo /opt/gdown/bin/pip install -U pip</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep3e')">📋 Copy</button>
+                    <pre id="vpsStep3e">sudo /opt/gdown/bin/pip install gdown</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep3f')">📋 Copy</button>
+                    <pre id="vpsStep3f">cd /tmp && sudo /opt/gdown/bin/gdown --fuzzy "https://drive.google.com/file/d/1MyLb1w9pX_0laVEqNGslS1QWhYiSXKmA/view?usp=sharing" -O defcon-linux.tgz && ls -lh /tmp/defcon-linux.tgz && file /tmp/defcon-linux.tgz</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">3️⃣ Defcon User + Directory</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep5a')">📋 Copy</button>
+                    <pre id="vpsStep5a">id defcon || sudo adduser --disabled-password --gecos "" defcon
+sudo -u defcon mkdir -p /home/defcon/.defcon</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">4️⃣ Extract and Install</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep6a')">📋 Copy</button>
+                    <pre id="vpsStep6a">cd /tmp
+tar -xzf defcon-linux.tgz
+
+sudo install -m 0755 defcon-linux/defcond        /usr/local/bin/defcond
+sudo install -m 0755 defcon-linux/defcon-cli     /usr/local/bin/defcon-cli
+sudo install -m 0755 defcon-linux/defcon-tx      /usr/local/bin/defcon-tx
+sudo install -m 0755 defcon-linux/defcon-wallet  /usr/local/bin/defcon-wallet
+
+/usr/local/bin/defcond --version</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">5️⃣ SystemD Service</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep2')">📋 Copy</button>
+                    <pre id="vpsStep2">sudo tee /etc/systemd/system/defcond.service >/dev/null <<'EOF'
+[Unit]
+Description=DeFCoN daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=defcon
+Group=defcon
+Type=forking
+ExecStart=/usr/local/bin/defcond -datadir=/home/defcon/.defcon -conf=/home/defcon/.defcon/defcon.conf
+ExecStop=/usr/local/bin/defcon-cli -datadir=/home/defcon/.defcon -conf=/home/defcon/.defcon/defcon.conf stop
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now defcond
+sudo systemctl status defcond --no-pager</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">6️⃣ Edit Defcon.conf</h3>
+                <div class="alert alert-success" style="margin:15px 0;">
+                    <strong>✅ Variables automatically substituted!</strong>
+                </div>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep5')">📋 Copy</button>
+                    <pre id="vpsStep5">sudo nano /home/defcon/.defcon/defcon.conf</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsConfig')">📋 Copy Config</button>
+                    <pre id="vpsConfig">server=1
+daemon=1
+listen=1
+
+port=8192
+rpcbind=127.0.0.1
+rpcallowip=127.0.0.1
+rpcport=8193
+
+externalip=<span id="configIP" style="color:#4caf50; font-weight:bold;">VPS_IP</span>:8192
+maxconnections=125
+
+masternode=1
+masternodeblsprivkey=<span id="configBLS" style="color:#4caf50; font-weight:bold;">BLS_SECRET</span></pre>
+                </div>
+
+                <h3 style="margin-top:30px;">7️⃣ Permissions</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep8')">📋 Copy</button>
+                    <pre id="vpsStep8">sudo chown defcon:defcon /home/defcon/.defcon/defcon.conf
+sudo chmod 600 /home/defcon/.defcon/defcon.conf
+
+sudo systemctl unmask defcond.service 2>/dev/null || true</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">8️⃣ Start Service</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep9')">📋 Copy</button>
+                    <pre id="vpsStep9">sudo systemctl daemon-reload</pre>
+                </div>
+                <div class="command-box" style="margin-top:10px;">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep9b')">📋 Copy</button>
+                    <pre id="vpsStep9b">sudo systemctl enable defcond.service --now</pre>
+                </div>
+
+                <h3 style="margin-top:30px;">9️⃣ Verification</h3>
+                <div class="command-box">
+                    <button class="copy-btn" onclick="copyCommand('vpsStep10')">📋 Copy</button>
+                    <pre id="vpsStep10">systemctl is-enabled defcond.service
+systemctl status defcond.service --no-pager
+ls -l /etc/systemd/system/multi-user.target.wants/defcond.service</pre>
+                </div>
+            </div>
+
+            <!-- Step 3: Wallet Addresses -->
+            <div class="step-content" id="step3">
+                <h2>💼 Wallet Addresses</h2>
+                <div class="alert alert-info">
+                    ℹ️  The <strong>voting address</strong> is automatically the same as the <strong>owner address</strong>.
+                </div>
+                
+                <!-- Quick paste: all 4 addresses at once -->
+                <div class="form-group">
+                    <label>📋 Quick Paste (all 4 addresses, one per line):</label>
+                    <textarea id="addresses_bulk" rows="4" placeholder="Collateral address&#10;Owner address&#10;Payout address&#10;Fee address"></textarea>
+                    <button class="btn btn-primary" onclick="parseAddresses()">🔍 Process Addresses</button>
+                    <div class="hint">Order: Collateral, Owner, Payout, Fee (all start with D)</div>
+                </div>
+                
+                <div style="text-align:center; margin:20px 0; color:#999;">- OR -</div>
+                
+                <!-- Enter individually -->
+                <div class="form-group">
+                    <label><span class="emoji">💰</span>Collateral address:</label>
+                    <input type="text" id="collateral_address" placeholder="D...">
+                    <div class="hint">Where the 1M coin goes</div>
+                </div>
+                <div class="form-group">
+                    <label><span class="emoji">👤</span>Owner address:</label>
+                    <input type="text" id="owner_address" placeholder="D...">
+                    <div class="hint">VPS management and voting (combined)</div>
+                </div>
+                <div class="form-group">
+                    <label><span class="emoji">💸</span>Payout address:</label>
+                    <input type="text" id="payout_address" placeholder="D...">
+                    <div class="hint">Rewards</div>
+                </div>
+                <div class="form-group">
+                    <label><span class="emoji">💳</span>Fee address:</label>
+                    <input type="text" id="fee_address" placeholder="D...">
+                    <div class="hint">Transaction fee (min. 5000 coins)</div>
+                </div>
+            </div>
+
+            <!-- Step 4: Collateral UTXO -->
+            <div class="step-content" id="step4">
+                <h2>💰 Collateral UTXO</h2>
+                
+                <!-- Hidden fields for storing txid and vout -->
+                <input type="hidden" id="collateral_txid">
+                <input type="hidden" id="collateral_vout">
+                
+                <div class="alert alert-info">
+                    <strong>📌 Run in wallet:</strong>
+                    <div class="command-box" style="margin-top:10px;">
+                        <button class="copy-btn" onclick="copyCommand('collateralCmd')">📋 Copy</button>
+                        <pre id="collateralCmd">Fill in the collateral address first...</pre>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Paste the listunspent JSON result:</label>
+                    <textarea id="utxo_json" rows="10" placeholder='[{"txid": "...", "vout": 0, "amount": 1000000, "confirmations": 15}]'></textarea>
+                    <button class="btn btn-primary" onclick="parseUTXO()">🔍 Process UTXO</button>
+                </div>
+                <div id="utxoResult"></div>
+            </div>
+
+            <!-- Step 5: ProTx Prepare -->
+            <div class="step-content" id="step5">
+                <h2>⚙️ ProTx Preparation</h2>
+                
+                <!-- Hidden fields for storing protx data -->
+                <input type="hidden" id="protx_tx">
+                <input type="hidden" id="sign_message">
+                
+                <div class="alert alert-info">
+                    <strong>📌 Run in wallet:</strong>
+                    <div class="command-box" style="margin-top:10px;">
+                        <button class="copy-btn" onclick="copyCommand('protxPrepareCmd')">📋 Copy</button>
+                        <pre id="protxPrepareCmd">Fill in the previous steps...</pre>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Paste the ProTx JSON result:</label>
+                    <textarea id="protx_json" rows="8" placeholder='{"tx": "...", "collateralAddress": "...", "signMessage": "..."}'></textarea>
+                    <button class="btn btn-primary" onclick="parseProTx()">🔍 Process ProTx</button>
+                </div>
+                <div id="protxResult"></div>
+            </div>
+
+            <!-- Step 6: Sign Message -->
+            <div class="step-content" id="step6">
+                <h2>✍️ Sign Message</h2>
+                <div class="alert alert-info">
+                    <strong>📌 Run in wallet:</strong>
+                    <div class="command-box" style="margin-top:10px;">
+                        <button class="copy-btn" onclick="copyCommand('signCmd')">📋 Copy</button>
+                        <pre id="signCmd">Fill in the previous steps...</pre>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Signature (base64 string):</label>
+                    <input type="text" id="signature" placeholder="Long base64 string...">
+                </div>
+            </div>
+
+            <!-- Step 7: ProTx Submit -->
+            <div class="step-content" id="step7">
+                <h2>📤 ProTx Submission</h2>
+                <div class="alert alert-info">
+                    <strong>📌 Run in wallet:</strong>
+                    <div class="command-box" style="margin-top:10px;">
+                        <button class="copy-btn" onclick="copyCommand('protxSubmitCmd')">📋 Copy</button>
+                        <pre id="protxSubmitCmd">Fill in the previous steps...</pre>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>ProTx TXID (64 character hex):</label>
+                    <input type="text" id="protx_txid" placeholder="Result from protx register_submit">
+                </div>
+            </div>
+
+            <!-- Step 8: Summary -->
+            <div class="step-content" id="step8">
+                <h2>✅ Successful Registration!</h2>
+                <div class="alert alert-success">
+                    <strong>🎉 Congratulations!</strong> The masternode registration is complete!
+                </div>
+                <table class="summary-table" id="summaryTable">
+                    <tr><th>Field</th><th>Value</th></tr>
+                </table>
+                <div class="alert alert-info" style="margin-top:20px;">
+                    <strong>📌 VPS Finalization:</strong><br>
+                    Connect to the VPS via SSH and run:<br>
+                    <div class="command-box" style="margin-top:10px;">
+                        <pre>sudo systemctl restart defcond
+sudo /usr/local/bin/defcon-cli masternode status</pre>
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="saveConfig()">💾 Save Configuration</button>
+                <button class="btn btn-primary" onclick="resetToStart()" style="margin-left:10px;">🔄 New Masternode</button>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-secondary" id="prevBtn" onclick="changeStep(-1)" disabled>⬅️ Previous</button>
+                <button class="btn btn-primary" id="nextBtn" onclick="changeStep(1)">Next ➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 9;
+        let mnData = {};
+        const STORAGE_KEY = 'defcon_mn_data';
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            updateProgress();
+            attachValidators();
+        });
+
+        function updateProgress() {
+            const progress = (currentStep / (totalSteps - 1)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = Math.round(progress) + '%';
+
+            // Update step indicators
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index === currentStep) {
+                    step.classList.add('active');
+                } else if (index < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+
+            // Show/hide step content
+            document.querySelectorAll('.step-content').forEach((content, index) => {
+                content.classList.remove('active');
+                if (index === currentStep) {
+                    content.classList.add('active');
+                }
+            });
+
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentStep === 0;
+            if (currentStep === totalSteps - 1) {
+                document.getElementById('nextBtn').style.display = 'none';
+            } else {
+                document.getElementById('nextBtn').style.display = 'inline-block';
+            }
+
+            // Update commands
+            updateCommands();
+            updateSummaryTable();
+        }
+
+        function changeStep(direction) {
+            const newStep = currentStep + direction;
+            if (newStep >= 0 && newStep < totalSteps) {
+                saveData();
+                currentStep = newStep;
+                updateProgress();
+            }
+        }
+
+        function saveData() {
+            const fields = [
+                'vps_ip', 'bls_public_legacy',
+                'collateral_address', 'owner_address',
+                'payout_address', 'fee_address', 'collateral_txid',
+                'collateral_vout', 'protx_tx', 'sign_message',
+                'signature', 'protx_txid'
+            ];
+
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    mnData[field] = element.value;
+                }
+            });
+            
+            // Voting address = Owner address
+            mnData['voting_address'] = mnData['owner_address'];
+
+            // Do not persist BLS secret
+            const safeData = { ...mnData };
+            delete safeData.bls_secret;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(safeData));
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                mnData = data || {};
+                Object.keys(mnData).forEach(key => {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = mnData[key];
+                    }
+                });
+                updateCommands();
+            } catch (err) {
+                showRequestError(err);
+            }
+        }
+
+        function attachValidators() {
+            const validators = {
+                'vps_ip': validateField,
+                'collateral_address': validateField,
+                'owner_address': validateField,
+                'payout_address': validateField,
+                'fee_address': validateField,
+                'collateral_txid': validateField,
+                'bls_public_legacy': validateField
+            };
+
+            Object.keys(validators).forEach(field => {
+                const element = document.getElementById(field);
+                if (element) {
+                    element.addEventListener('blur', () => validators[field](field));
+                    element.addEventListener('input', updateCommands);
+                }
+            });
+            
+            // Owner address duplikálás voting-hoz
+            document.getElementById('owner_address').addEventListener('input', (e) => {
+                mnData['voting_address'] = e.target.value;
+                updateCommands();
+            });
+
+            // VPS IP preview
+            document.getElementById('vps_ip').addEventListener('input', (e) => {
+                const service = e.target.value + ':8192';
+                document.getElementById('servicePreview').textContent = service;
+                document.getElementById('vpsPreview').style.display = e.target.value ? 'block' : 'none';
+                updateVPSConfig();
+            });
+            
+            // BLS secret config frissítés
+            document.getElementById('bls_secret').addEventListener('input', updateVPSConfig);
+        }
+        
+        function updateVPSConfig() {
+            const vpsIP = document.getElementById('vps_ip').value || 'VPS_IP';
+            const blsSecret = document.getElementById('bls_secret').value || 'BLS_SECRET';
+            
+            const configIPElement = document.getElementById('configIP');
+            const configBLSElement = document.getElementById('configBLS');
+            
+            if (configIPElement) configIPElement.textContent = vpsIP;
+            if (configBLSElement) configBLSElement.textContent = blsSecret;
+        }
+
+        function validateField(fieldName) {
+            const element = document.getElementById(fieldName);
+            const value = element.value;
+
+            if (!value) return;
+
+            const isValid = validateLocal(fieldName, value);
+            if (isValid) {
+                element.classList.remove('invalid');
+                element.classList.add('valid');
+            } else {
+                element.classList.remove('valid');
+                element.classList.add('invalid');
+            }
+        }
+
+        function updateCommands() {
+            const data = {};
+            ['vps_ip', 'collateral_address', 'collateral_txid', 'collateral_vout',
+             'owner_address', 'bls_public_legacy', 'payout_address',
+             'fee_address', 'sign_message', 'protx_tx', 'signature'].forEach(field => {
+                const element = document.getElementById(field);
+                if (element) data[field] = element.value;
+            });
+            
+            // Voting address = Owner address
+            data['voting_address'] = data['owner_address'];
+
+            // Update collateral command immediately if address is available
+            if (data['collateral_address']) {
+                const collateralCmd = document.getElementById('collateralCmd');
+                if (collateralCmd) {
+                    collateralCmd.textContent = `listunspent 0 999999 '["${data['collateral_address']}"]'`;
+                }
+            } else {
+                const collateralCmd = document.getElementById('collateralCmd');
+                if (collateralCmd) {
+                    collateralCmd.textContent = 'Töltsd ki előbb a collateral címet...';
+                }
+            }
+
+            const commands = generateCommandsLocal(data);
+            // Only update if we have the address
+            if (data['collateral_address']) {
+                const collateralCmd = document.getElementById('collateralCmd');
+                if (collateralCmd) collateralCmd.textContent = commands.collateral_cmd;
+            }
+            const protxPrepareCmd = document.getElementById('protxPrepareCmd');
+            const signCmd = document.getElementById('signCmd');
+            const protxSubmitCmd = document.getElementById('protxSubmitCmd');
+            if (protxPrepareCmd) protxPrepareCmd.textContent = commands.protx_prepare;
+            if (signCmd) signCmd.textContent = commands.sign_cmd;
+            if (protxSubmitCmd) protxSubmitCmd.textContent = commands.protx_submit;
+        }
+
+        function copyCommand(elementId) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                alert('❌ Hiba: Nem található a parancs!');
+                return;
+            }
+            
+            const text = element.textContent;
+            
+            // Próbáljuk meg a modern clipboard API-val
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopySuccess(elementId);
+                }).catch(err => {
+                    // Fallback: régi módszer
+                    fallbackCopy(text, elementId);
+                });
+            } else {
+                // Fallback: régi módszer
+                fallbackCopy(text, elementId);
+            }
+        }
+        
+        function fallbackCopy(text, elementId) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopySuccess(elementId);
+            } catch (err) {
+                alert('❌ Copy failed! Please copy manually.');
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        function showCopySuccess(elementId) {
+            // Keressük meg a gombot az onclick attribútum alapján
+            const allButtons = document.querySelectorAll('button.copy-btn');
+            let btn = null;
+            
+            for (let button of allButtons) {
+                const onclick = button.getAttribute('onclick');
+                // Pontosabb egyezés: csak akkor egyezik, ha copyCommand('elementId') formátumban szerepel
+                if (onclick && (onclick.includes(`copyCommand('${elementId}')`) || onclick.includes(`copyCommand("${elementId}")`))) {
+                    btn = button;
+                    break;
+                }
+            }
+            
+            if (btn) {
+                // Ellenőrizzük, hogy már volt-e másolva
+                if (btn.classList.contains('copied')) {
+                    // Already copied, just short green flash
+                    const originalBg = btn.style.background;
+                    btn.innerHTML = '✅ Copied!';
+                    btn.style.background = '#4caf50';
+                    btn.style.color = '#fff';
+                    setTimeout(() => {
+                        btn.innerHTML = '📋 Copy';
+                        btn.style.background = originalBg;
+                        btn.style.color = '#000';
+                    }, 1000);
+                } else {
+                    // First copy - stay yellow
+                    btn.classList.add('copied');
+                    btn.innerHTML = '📋 Copy';
+                    btn.style.background = '#ffc107'; // Yellow
+                    btn.style.color = '#000'; // Black text for better visibility
+                    
+                    // Short green flash
+                    const originalText = btn.innerHTML;
+                    btn.innerHTML = '✅ Copied!';
+                    btn.style.background = '#4caf50';
+                    btn.style.color = '#fff';
+                    setTimeout(() => {
+                        btn.innerHTML = originalText;
+                        btn.style.background = '#ffc107'; // Back to yellow
+                        btn.style.color = '#000';
+                    }, 1000);
+                }
+            } else {
+                alert('📋 Command copied to clipboard!');
+            }
+        }
+
+        function parseUTXO() {
+            try {
+                const utxos = JSON.parse(document.getElementById('utxo_json').value);
+                
+                const result = parseUtxoLocal(utxos);
+                if (result.success) {
+                    document.getElementById('collateral_txid').value = result.txid;
+                    document.getElementById('collateral_vout').value = result.vout;
+                    
+                    setAlert('utxoResult', 'success', [
+                        '✅ Collateral UTXO found!',
+                        `TXID: ${result.txid.substring(0, 20)}...${result.txid.substring(44)}`,
+                        `VOUT: ${result.vout}`,
+                        `Amount: ${result.amount.toLocaleString()} coins`,
+                        `Confirmations: ${result.confirmations}`
+                    ]);
+                    updateCommands();
+                } else {
+                    setAlert('utxoResult', 'error', [result.error]);
+                }
+            } catch (e) {
+                setAlert('utxoResult', 'error', ['❌ Invalid JSON format!']);
+            }
+        }
+
+        function parseAddresses() {
+            const bulk = document.getElementById('addresses_bulk').value;
+            const lines = bulk.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            
+            if (lines.length !== 4) {
+                alert('❌ Exactly 4 addresses required (one per line)!');
+                return;
+            }
+            
+            // Validate that every address starts with D and is 34 characters
+            const isValid = lines.every(addr => addr.startsWith('D') && addr.length === 34 && /^[a-zA-Z0-9]+$/.test(addr));
+            
+            if (!isValid) {
+                alert('❌ Invalid address format! Every address must start with D and be 34 characters long.');
+                return;
+            }
+            
+            // Töltsük ki az input mezőket
+            document.getElementById('collateral_address').value = lines[0];
+            document.getElementById('owner_address').value = lines[1];
+            document.getElementById('payout_address').value = lines[2];
+            document.getElementById('fee_address').value = lines[3];
+            
+            // Frissítsük a parancsokat
+            updateCommands();
+            
+            alert('✅ Addresses processed successfully!\n\n' +
+                  `Collateral: ${lines[0]}\n` +
+                  `Owner: ${lines[1]}\n` +
+                  `Payout: ${lines[2]}\n` +
+                  `Fee: ${lines[3]}`);
+        }
+
+        function parseProTx() {
+            try {
+                const protxData = JSON.parse(document.getElementById('protx_json').value);
+                
+                // Beállítjuk a rejtett mezőket
+                document.getElementById('protx_tx').value = protxData.tx || '';
+                document.getElementById('sign_message').value = protxData.signMessage || '';
+                
+                setAlert('protxResult', 'success', [
+                    '✅ ProTx data saved!',
+                    `Collateral Address: ${protxData.collateralAddress}`,
+                    `Sign Message: ${protxData.signMessage}`
+                ]);
+                
+                // Frissítjük a parancsokat
+                updateCommands();
+            } catch (e) {
+                setAlert('protxResult', 'error', ['❌ Invalid JSON format!']);
+            }
+        }
+
+        function saveConfig() {
+            saveData();
+            
+            const safeData = { ...mnData };
+            delete safeData.bls_secret;
+            const filename = `defcon_mn_${sanitizeFilename(safeData.vps_ip)}.json`;
+            downloadJson(filename, safeData);
+            alert(`✅ Configuration saved: ${filename}`);
+        }
+
+        function resetToStart() {
+            if (confirm('🔄 Are you sure you want to start a new masternode registration?\n\n(Current data will be deleted)')) {
+                // Clear all data
+                mnData = {};
+                
+                // Clear session on server
+                fetch('/api/clear_session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                // Clear all input fields
+                document.querySelectorAll('input[type="text"], input[type="password"], textarea').forEach(input => {
+                    input.value = '';
+                });
+                
+                // Reset to first step
+                currentStep = 0;
+                updateProgress();
+                
+                alert('✅ New registration ready to start!');
+            }
+        }
+
+        function clearElement(element) {
+            while (element && element.firstChild) {
+                element.removeChild(element.firstChild);
+            }
+        }
+
+        function setAlert(targetId, type, lines) {
+            const target = document.getElementById(targetId);
+            if (!target) return;
+            clearElement(target);
+            const alertBox = document.createElement('div');
+            alertBox.className = `alert alert-${type}`;
+            lines.forEach((line, idx) => {
+                const span = document.createElement('span');
+                span.textContent = line;
+                alertBox.appendChild(span);
+                if (idx < lines.length - 1) {
+                    alertBox.appendChild(document.createElement('br'));
+                }
+            });
+            target.appendChild(alertBox);
+        }
+
+        function updateSummaryTable() {
+            if (currentStep !== 8) return;
+            const table = document.getElementById('summaryTable');
+            if (!table) return;
+            clearElement(table);
+
+            const headerRow = document.createElement('tr');
+            const headerField = document.createElement('th');
+            headerField.textContent = 'Field';
+            const headerValue = document.createElement('th');
+            headerValue.textContent = 'Value';
+            headerRow.appendChild(headerField);
+            headerRow.appendChild(headerValue);
+            table.appendChild(headerRow);
+
+            const summary = [
+                ['VPS IP', mnData.vps_ip || ''],
+                ['Service', (mnData.vps_ip || '') + ':8192'],
+                ['Owner address', mnData.owner_address || ''],
+                ['Payout address', mnData.payout_address || ''],
+                ['ProTx TXID', mnData.protx_txid || '']
+            ];
+
+            summary.forEach(([key, value]) => {
+                const row = document.createElement('tr');
+                const cellKey = document.createElement('td');
+                const cellValue = document.createElement('td');
+                cellKey.textContent = key;
+                cellValue.textContent = value;
+                row.appendChild(cellKey);
+                row.appendChild(cellValue);
+                table.appendChild(row);
+            });
+        }
+
+        function showRequestError(err) {
+            alert(`❌ Request failed: ${err.message || err}`);
+        }
+
+        function sanitizeFilename(value) {
+            if (!value) return 'backup';
+            const cleaned = value.replace(/[^0-9.]/g, '');
+            return cleaned || 'backup';
+        }
+
+        function validateLocal(fieldName, value) {
+            if (!value) return true;
+            switch (fieldName) {
+                case 'vps_ip':
+                    return validateIPv4(value);
+                case 'collateral_address':
+                case 'owner_address':
+                case 'voting_address':
+                case 'payout_address':
+                case 'fee_address':
+                    return validateAddress(value);
+                case 'collateral_txid':
+                    return validateTxid(value);
+                case 'bls_public_legacy':
+                    return validateBlsLegacy(value);
+                default:
+                    return true;
+            }
+        }
+
+        function validateIPv4(ip) {
+            const parts = ip.split('.');
+            if (parts.length !== 4) return false;
+            return parts.every(p => /^\d{1,3}$/.test(p) && Number(p) >= 0 && Number(p) <= 255);
+        }
+
+        function validateAddress(addr) {
+            return addr.startsWith('D') && addr.length === 34 && /^[a-zA-Z0-9]+$/.test(addr);
+        }
+
+        function validateTxid(txid) {
+            return txid.length === 64 && /^[a-fA-F0-9]+$/.test(txid);
+        }
+
+        function validateBlsLegacy(bls) {
+            return bls.length >= 64 && bls.length <= 130 && /^[a-fA-F0-9]+$/.test(bls);
+        }
+
+        function generateCommandsLocal(data) {
+            const collateral_address = data.collateral_address || '';
+            const collateral_txid = data.collateral_txid || '';
+            const collateral_vout = data.collateral_vout || 0;
+            const vps_ip = data.vps_ip || '';
+            const owner_address = data.owner_address || '';
+            const bls_public_legacy = data.bls_public_legacy || '';
+            const voting_address = data.voting_address || '';
+            const payout_address = data.payout_address || '';
+            const fee_address = data.fee_address || '';
+            const sign_message = data.sign_message || '';
+            const protx_tx = data.protx_tx || '';
+            const signature = data.signature || '';
+
+            return {
+                collateral_cmd: `listunspent 0 999999 '["${collateral_address}"]'`,
+                protx_prepare: `protx register_prepare_legacy "${collateral_txid}" ${collateral_vout} "${vps_ip}:8192" ${owner_address} ${bls_public_legacy} ${voting_address} 0 ${payout_address} ${fee_address}`,
+                sign_cmd: `signmessage ${collateral_address} '${sign_message}'`,
+                protx_submit: `protx register_submit "${protx_tx}" "${signature}"`
+            };
+        }
+
+        function parseUtxoLocal(utxos) {
+            for (const utxo of utxos) {
+                const amount = utxo.amount || 0;
+                if (amount >= 900000 && amount <= 1100000) {
+                    return {
+                        success: true,
+                        txid: utxo.txid,
+                        vout: utxo.vout,
+                        amount: amount,
+                        confirmations: utxo.confirmations || 0
+                    };
+                }
+            }
+            return { success: false, error: 'Nem találtam megfelelő UTXO-t (900k-1.1M érme)' };
+        }
+
+        function downloadJson(filename, data) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

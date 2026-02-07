@@ -1,7 +1,11 @@
 # DEFCON Masternode Helper
 
+[![GitHub](https://img.shields.io/badge/GitHub-minuszka%2Fdefcon--mn--installer-blue)](https://github.com/minuszka/defcon-mn-installer)
+
 A guided web UI that walks users through DeFCoN masternode registration.  
 It keeps all critical steps and commands in one place, reducing errors during setup.
+
+![DEFCON Masternode Helper Screenshot](screenshot.png)
 
 ## Key Features
 - Multi-step guided flow (progress bar + steps)
@@ -17,29 +21,20 @@ It keeps all critical steps and commands in one place, reducing errors during se
 - Filename sanitization on export (path traversal protection)
 - Basic security headers in the mini server (nosniff, frame-deny)
 
-## Requirements
+## Installation & Setup
+
+### Requirements
 - Java 17+ (recommended)
 
-## Run (Local)
-```powershell
-javac LocalServer.java
-java LocalServer
-```
+### Quick Start (Windows)
 
-Default URL:
-```
-http://127.0.0.1:8080
-```
-
-## Quick Start (Windows)
-In PowerShell, use the `.\` prefix to run from the current directory:
+**Option 1: Using Batch File**
 ```powershell
 .\start.bat
 ```
 
-## Start via PowerShell Script
+**Option 2: Using PowerShell Script**
 ```powershell
-cd d:\www\DEFCON_MN_HELPER
 .\start.ps1
 ```
 
@@ -48,7 +43,15 @@ If PowerShell blocks execution, allow it for this session:
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
-Both start methods automatically open the browser at `http://127.0.0.1:8080`.
+Both start methods automatically compile, start the server, and open your browser at `http://127.0.0.1:8080`.
+
+### Manual Start
+```powershell
+javac LocalServer.java
+java LocalServer
+```
+
+Default URL: `http://127.0.0.1:8080`
 
 ## Environment Variables
 ```powershell
